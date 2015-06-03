@@ -26,7 +26,7 @@
 
 ; new
 (define (transpose mat)
-  (accumulate-n cons '() mat))
+  (accumulate-n list '() mat))
 
 
 (define (matrix-*-matrix m n)
