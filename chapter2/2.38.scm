@@ -2,7 +2,7 @@
   (define (iter result rest)
     (if (null? rest)
       result
-      (iter (op (car items) result)
+      (iter (op result (car rest))
             (cdr rest))))
   (iter seq initial))
 
