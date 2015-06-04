@@ -2,7 +2,7 @@
   (fold-left (lambda (result item) (cons item result)) '() seq))
 
 (define (reverse seq)
-  (fold-right (lambda (item rest) (append rest item)) '() seq))
+  (fold-right (lambda (item rest) (append rest (list item))) '() seq))
 
 
 (define (fold-left op initial seq)
