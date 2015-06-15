@@ -1,0 +1,5 @@
+(define (equal? a b)
+  (if (pair? a b)
+    (and (equal? (car a) (car b))
+         (equal? (cdr a) (cdr b)))
+    (eq? a b)))
