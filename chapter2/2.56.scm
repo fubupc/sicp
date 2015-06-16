@@ -29,7 +29,7 @@
          (+ v1 v2))
         (else (list '+ v1 v2))))
 
-(define (make-multiplication v1 v2)
+(define (make-product v1 v2)
   (cond ((eq? v1 0) 0)
         ((eq? v2 0) 0)
         ((eq? v1 1) v2)
@@ -41,7 +41,7 @@
   (and (pair? e)
        (eq? '+ (car e))))
 
-(define (multiplication? e)
+(define (product? e)
   (and (pair? e)
        (eq? '* (car e))))
 
@@ -69,14 +69,14 @@
         ((sum? exp)
          (make-sum (deriv (addend exp) var)
                    (deriv (augend exp) var)))
-        ((multiplication? exp)
-         (make-sum (make-multiplication (multiplier exp)
+        ((product? exp)
+         (make-sum (make-product (multiplier exp)
                                         (deriv (multiplicand exp) var))
-                   (make-multiplication (multiplicand exp)
+                   (make-product (multiplicand exp)
                                         (deriv (multiplier exp) var))))
         ((exponentiation? exp)
-         (make-multiplication 
-           (make-multiplication 
+         (make-product 
+           (make-product 
              (exponent exp)
              (make-exponentiation (base exp) (- (exponent exp) 1)))
            (deriv (base exp) var)))

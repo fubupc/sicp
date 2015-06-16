@@ -23,7 +23,7 @@
       (car _aug)
       (cons '+ _aug))))
 
-(define (make-multiplication . s)
+(define (make-product . s)
   (define (mul-iter num-product symbols seq)
     (if (null? seq)
       (cond ((null? symbols) num-product)
