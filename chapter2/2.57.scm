@@ -9,9 +9,9 @@
             (else (cons '+ (cons num-sum symbols))))
       (let ((next (car seq))
             (rest (cdr seq)))
-        (if (number? next)
-          (sum-iter (+ num-sum next) symbols rest)
-          (sum-iter num-sum (append symbols (list next)) rest)))))
+        (cond ((number? next) (sum-iter (+ num-sum next) symbols rest))
+              ((sum? next) (sum-iter num-sum symbols (append (cdr next) rest)))
+              (else (sum-iter num-sum (append symbols (list next)) rest))))))
   (sum-iter 0 '() s))
 
 (define (addend e)
@@ -19,7 +19,7 @@
 
 (define (augend e)
   (let ((_aug (cddr e)))
-    (if (null? (cdr _aug))
+    (if (= (length _aug) 1)
       (car _aug)
       (cons '+ _aug))))
 
@@ -34,8 +34,9 @@
             (else (cons '* (cons num-product symbols))))
       (let ((next (car seq))
             (rest (cdr seq)))
-        (cond ((and (number? next) (= next 0)) 0)
+        (cond ((and (number? next) (= next 0)) 0)  ; return early.
               ((number? next) (mul-iter (* num-product next) symbols rest))
+              ((product? next) (mul-iter num-product symbols (append (cdr next) rest)))
               (else (mul-iter num-product (append symbols (list next)) rest))))))
   (mul-iter 1 '() s))
 
@@ -44,7 +45,7 @@
 
 (define (multiplicand e)
   (let ((_mul (cddr e)))
-    (if (null? (cdr _mul))
+    (if (= (length _mul) 1)
       (car _mul)
       (cons '* _mul))))
 
