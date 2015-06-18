@@ -38,6 +38,22 @@
                     (eq? (cadr e) '+))
               true
               (sum? rest))))))
+; anther sum
+(define (slice seq num)
+  (cond ((< num 0) (error "num must positive."))
+        ((< (length seq) num) (error "num out of range."))
+        ((= num 0) '())
+        (else (cons (car seq) (slice (cdr seq) (- num 1))))))
+
+(define (sum? e)
+  (display e)
+  (newline)
+  (if (or (not (pair? e)) (< (length e) 3))
+    false
+    (let ((rest (cddr e)))
+      (if (eq? (cadr e) '+)
+        true
+        (sum? (cons (slice e 3) (cdddr e)))))))
 
 (define (addend e)
   (define (iter result e)
