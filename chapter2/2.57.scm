@@ -1,3 +1,7 @@
+(define (sum? e)
+  (and (pair? e)
+       (eq? (car e) '+)))
+
 (define (make-sum . s)
   (define (sum-iter num-sum symbols seq)
     (if (null? seq)
@@ -10,7 +14,7 @@
       (let ((next (car seq))
             (rest (cdr seq)))
         (cond ((number? next) (sum-iter (+ num-sum next) symbols rest))
-              ((sum? next) (sum-iter num-sum symbols (append (cdr next) rest)))
+              ((and (pair? next) (sum? next)) (sum-iter num-sum symbols (append (cdr next) rest)))
               (else (sum-iter num-sum (append symbols (list next)) rest))))))
   (sum-iter 0 '() s))
 
