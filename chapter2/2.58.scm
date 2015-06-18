@@ -1,6 +1,11 @@
 ; a. infix expression always take two parameters and fully parenthesized.
 ; e.g. (x + (3 * (x + (y + 2))))
 (define (make-sum v1 v2)
+  (display "[ make-sum ] ")
+  (display v1)
+  (display " -=- ")
+  (display v2)
+  (newline)
   (list v1 '+ v2))
 
 (define (sum? e)
@@ -30,15 +35,17 @@
 ; b. loose infix expression 
 ; e.g. (x + 3 * (x + y + 2))
 (define (sum? e)
+  (display "[ sum? ] ")
+  (display e)
+  (newline)
   (cond ((not (pair? e)) false)
         ((< (length e) 3) false)
         (else
           (let ((rest (cddr e)))
-            (if (or (= (length rest) 1)
-                    (eq? (cadr e) '+))
-              true
-              (sum? rest))))))
-; anther sum
+            (cond ((eq? (cadr e) '+) true)
+                  ((= (length rest) 1) false)
+                  (else (sum? rest)))))))
+; another sum
 (define (slice seq num)
   (cond ((< num 0) (error "num must positive."))
         ((< (length seq) num) (error "num out of range."))
@@ -46,6 +53,7 @@
         (else (cons (car seq) (slice (cdr seq) (- num 1))))))
 
 (define (sum? e)
+  (display "[ sum? ] ")
   (display e)
   (newline)
   (if (or (not (pair? e)) (< (length e) 3))

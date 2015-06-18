@@ -64,6 +64,9 @@
   (eq? v1 v2))
 
 (define (deriv exp var)
+  (display "[ deriv ] ")
+  (display exp)
+  (newline)
   (cond ((variable? exp) (if (same-variable? exp var) 1 0))
         ((number? exp) 0)
         ((sum? exp)
