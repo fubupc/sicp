@@ -1,0 +1,31 @@
+(define (element-of-set? x set)
+  (cond ((null? set) false)
+        ((equal? x (car set)))
+        (else (element-of-set? x (cdr set)))))
+
+(define (equal? x y)
+  (cond ((and (not (pair? x))
+              (not (pair? y)))
+         (eq? x y))
+        ((and (pair? x)
+              (pair? y))
+         (or (and (null? x) (null? y))
+             (and (eq? (car x) (car y))
+                  (equal? (cdr x) (cdr y)))))
+        (else false)))
+
+(define (intersection-set set1 set2)
+  (if (null? set1)
+    '()
+    (if (element-of-set? (car set1) set2)
+      (cons (car set1) (intersection-set (cdr set1) set2))
+      (intersection-set (cdr set1) set2))))
+
+
+(define (union-set set1 set2)
+  (cond ((null? set1) set2)
+        ((null? set2) set1)
+        ((element-of-set? (car set1) set2)
+         (union-set (cdr set1) set2))
+        (else (cons (car set1) (union-set (cdr set1) set2)))))
+
