@@ -29,16 +29,17 @@
     (weight-leaf tree)
     (cadddr tree)))
 
-(define (left-tree tree)
+(define (left-branch tree)
   (if (leaf? tree)
-    (error "leaf node has no left-tree")
+    (error "leaf node has no left-branch")
     (car tree)))
 
-(define (right-tree tree)
+(define (right-branch tree)
   (if (leaf? tree)
-    (error "leaf node has no right-tree")
+    (error "leaf node has no right-branch")
     (cadr tree)))
 
+; deprecated. see 2.69.scm for better solution.
 (define (order-pairs pairs)
   (define (weight-pair pair) (cadr pair))
 
@@ -59,6 +60,7 @@
         (cons min-pair (order-pairs rest))))))
 
 
+; deprecated. see 2.69.scm for better solution.
 (define (pairs->leaf-list pairs)
   (if (null? pairs)
     '()
@@ -66,6 +68,7 @@
       (cons (make-leaf (car next) (cadr next))
             (pairs->leaf-list (cdr pairs))))))
 
+; deprecated. see 2.69.scm for better solution.
 (define (insert-tree tree ordered-list)
   (if (null? ordered-list)
     (list tree)
@@ -74,6 +77,7 @@
         (cons tree ordered-list)
         (cons next (insert-tree tree (cdr ordered-list)))))))
 
+; deprecated. see 2.69.scm for better solution.
 (define (generate-huffman-tree pairs)
   (define (iter tree-list)
     (let ((len (length tree-list)))
