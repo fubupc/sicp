@@ -1,6 +1,6 @@
 
-;(define (generate-huffman-tree pairs)
-;  (successive-merge (make-leaf-sets pairs)))
+(define (generate-huffman-tree pairs)
+  (successive-merge (make-leaf-sets pairs)))
 
 (define (adjoin-set x set)
   (cond ((null? set) (list x))
