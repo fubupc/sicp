@@ -32,15 +32,26 @@
         ((= bit 1) (right-branch tree))
         (else (error "bit must be 0 or 1."))))
 
+; v1
 (define (decode-iter bits current-branch origin-tree)
-  (cond ((null? bits) '())
-        ((leaf? current-branch)
-         (cons (symbol-leaf current-branch)
-               (decode-iter bits origin-tree origin-tree)))
-        (else
-          (decode-iter (cdr bits) 
-                       (select-branch (car bits) current-branch)
-                       origin-tree))))
+  (if (leaf? current-branch)
+    (cons (symbol-leaf current-branch)
+          (decode-iter bits origin-tree origin-tree))
+    (if (null? bits)
+      '()
+      (decode-iter (cdr bits) 
+                   (select-branch (car bits) current-branch)
+                   origin-tree))))
+
+; v2. better
+(define (decode-iter bits current-branch origin-tree)
+  (if (null? bits)
+    '()
+    (let ((next-branch (select-branch (car bits) current-branch)))
+      (if (leaf? next-branch)
+        (cons (symbol-leaf next-branch)
+              (decode-iter (cdr bits) origin-tree origin-tree))
+        (decode-iter (cdr bits) next-branch origin-tree)))))
 
 (define (decode bits tree)
   (decode-iter bits tree tree))
