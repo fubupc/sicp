@@ -40,7 +40,7 @@
       (set-rear-ptr! q node))
     (let ((node (make-node item (rear-ptr q) '())))
       (set-next (rear-ptr q) node)
-      (set-rear-ptr! node))))
+      (set-rear-ptr! q node))))
 
 (define (front-delete-deque! q)
   (cond ((empty-deque? q) (error "empty deque!"))
@@ -48,7 +48,9 @@
          (set-front-ptr! q '())
          (set-rear-ptr! q '()))
         (else
-          (set-front-ptr! q (next (front-ptr q))))))
+          (let ((next-node (next (front-ptr q))))
+            (set-prev next-node '())
+            (set-front-ptr! q next-node)))))
 
 (define (rear-delete-deque! q)
   (cond ((empty-deque? q) (error "empty deque cannot delete."))
@@ -56,9 +58,17 @@
          (set-rear-ptr! q '())
          (set-front-ptr! q '()))
         (else
-          (set-rear-ptr! q (prev (rear-ptr q))))))
+          (let ((prev-node (prev (rear-ptr q))))
+            (set-next prev-node '())
+            (set-rear-ptr! q prev-node)))))
 
 (define (print-deque q)
+  (define (iter node)
+    (if (no-next? node)
+      (cons (item node) '())
+      (cons (item node) (iter (next node)))))
+
   (if (empty-deque? q)
-    (display "error")))
+    '()
+    (iter (front-ptr q))))
 
