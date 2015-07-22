@@ -2,7 +2,10 @@
 
 (define (entry tree) (car tree))
 (define (left-branch tree) (cadr tree))
-(define (right-branch tree) (caadr tree))
+(define (right-branch tree) (caddr tree))
+
+(define (set-left! tree left) (set-car! (cdr tree) left))
+(define (set-right! tree right) (set-car! (cddr tree) right))
 
 (define (make-record key value) (cons key value))
 (define (key record) (car record))
@@ -105,4 +108,37 @@
             (set-cdr! new-record value)
             (insert remain-keys value new-record)))))))
 
+
+;; version 2. in place modification.
+;; note: caller ensure that tree is not empty.
+(define (insert-to-tree new-entry tree)
+  (let ((current-entry (entry tree)))
+    (let ((current-key (key current-entry))
+          (new-key (key new-entry)))
+      (cond ((= new-key current-key)
+             (set-cdr! current-entry (value new-entry)))
+            ((< new-key current-key)
+             (if (null? (left-branch tree))
+               (set-left! tree (make-tree new-entry '() '()))
+               (insert-to-tree new-entry (left-branch tree))))
+            ((> new-key current-key)
+             (if (null? (right-branch tree))
+               (set-right! tree (make-tree new-entry '() '()))
+               (insert-to-tree new-entry (right-branch tree))))))))
+
+(define (insert keys value table)
+  (let ((current-key (car keys))
+        (remain-keys (cdr keys)))
+    (let ((subtable (assoc current-key (cdr table))))
+      (if subtable
+        (if (null? remain-keys)
+          (set-cdr! subtable value)
+          (insert remain-keys value subtable))
+        (let ((new-record (make-record current-key '())))
+          (if (null? (cdr table))
+            (set-cdr! table (make-tree new-record '() '()))
+            (insert-to-tree new-record (cdr table)))
+          (if (null? remain-keys)
+            (set-cdr! new-record value)
+            (insert remain-keys value new-record)))))))
 
