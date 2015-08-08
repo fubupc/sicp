@@ -4,10 +4,8 @@
 (define (sum-pair pair)
   (+ (square (car pair)) (square (cadr pair))))
 
-(define pair-sums
-  (stream-map sum-pair (weighted-pairs integers integers sum-pair)))
-
-(define square-sum
-  (consecutive-equal pair-sums 3))
-
+(define square-sums
+  (stream-map (lambda (seq)
+                (cons (sum-pair (car seq)) seq))
+              (consecutive-equal (weighted-pairs integers integers sum-pair) sum-pair 3)))
 
