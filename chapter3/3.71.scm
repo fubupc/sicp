@@ -3,27 +3,29 @@
     1
     (* x (power x (- n 1)))))
 
-(define (calc pair)
+(define (cube-sum pair)
   (+ (power (car pair) 3)
      (power (cadr pair) 3)))
 
 (define (ramanujan-numbers)
-  (define cube-sums
+  (define ordered-pairs
     (weighted-pairs integers
                     integers
-                    calc))
-  (consecutive-equal (stream-map calc cube-sums) 2))
+                    cube-sum))
+  (stream-map (lambda (seq)
+                (cons (cube-sum (car seq)) seq))
+              (consecutive-equal ordered-pairs cube-sum 2)))
 
 
-(define (consecutive-equal s repeat)
-  (define (iter current count s)
+(define (consecutive-equal stream calc repeat-times)
+  (define (iter current seq count s)
     (let ((next (stream-car s)))
-      (if (= current next)
-        (iter current (+ count 1) (stream-cdr s))
-        (if (>= count repeat)
-          (cons-stream current
-                       (iter next 1 (stream-cdr s)))
-          (iter next 1 (stream-cdr s))))))
+      (if (= current (calc next))
+        (iter current (cons next seq) (+ count 1) (stream-cdr s))
+        (if (>= count repeat-times)
+          (cons-stream seq
+                       (iter (calc next) (list next) 1 (stream-cdr s)))
+          (iter (calc next) (list next) 1 (stream-cdr s))))))
 
-  (iter (stream-car s) 1 (stream-cdr s)))
+  (iter (calc (stream-car stream)) (list (stream-car stream)) 1 (stream-cdr stream)))
 
