@@ -31,3 +31,11 @@
 (define (make-if predicate consequent alternative)
   (list 'if predicate consequent alternative))
 
+
+
+
+;; define syntax
+(define (define? exp) (tagged-list? exp 'define))
+(define (define-variable exp) (cadr exp))
+(define (define-value exp) (caddr exp))
+
