@@ -34,18 +34,17 @@
 ;; note: because body is an expression sequence, so maybe bettter to 
 ;; wrap the result in a list.
 (define (scan-out-defines body)
-  (define (scan bindings assignments exps seq)
+  (define (scan bindings exps seq)
     (if (null? seq)
-      (make-let (reverse bindings) (append (reverse assignments) exps))
+      (make-let (reverse bindings) (reverse exps))
       (let ((first (car seq)))
         (if (define? first)
-          (scan (cons (make-binding (define-variable first) '*unassignment*) bindings)
-                (cons (make-assignment (define-variable first) (define-value first)) assignments)
-                exps
+          (scan (cons (make-binding (define-variable first) ''*unassignment*) bindings)
+                (cons (make-assignment (define-variable first) (define-value first)) exps)
                 (cdr seq))
-          (scan bindings assignments (cons first exps) (cdr seq))))))
+          (scan bindings (cons first exps) (cdr seq))))))
 
-  (scan '() '() '() body))
+  (scan '() '() body))
 
 
 ;; c. Install scan-out-defines in the interpreter, either in make-procedure 
